@@ -10,7 +10,7 @@ export async function Subjects({ userId }: { userId: string }) {
     return <>
         {allSubjects.data?.subjects && allSubjects.data.subjects.length > 0 ? (
             <div className="w-full h-full flex gap-3 flex-wrap md:flex-nowrap">
-                <div className="w-[60%] flex flex-col gap-3 mt-3 h-[500px] overflow-auto border-2 py-7 p-7 rounded-xl">
+                <div className="w-[60%] flex flex-col gap-3 mt-1 h-[450px] overflow-auto border-2 py-7 p-7 rounded-xl">
                     {allSubjects.data.subjects.map((subject) => (
                         <SubjectCard
                             key={subject.id}
@@ -20,7 +20,7 @@ export async function Subjects({ userId }: { userId: string }) {
                         />
                     ))}
                 </div>
-                <div className="w-[40%] rounded-xl border-2 mt-3 p-5">
+                <div className="w-[40%] rounded-xl border-2  p-5 h-[450px]">
                     <SubjectInfo subject_count={total_subjects ?? 0} userId={userId} />
                 </div>
             </div>

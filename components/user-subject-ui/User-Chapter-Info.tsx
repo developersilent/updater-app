@@ -11,7 +11,7 @@ import { ChaptersType } from "@/db/schema";
 
 export function UserChapterInfo({ data }: { data: ChaptersType[] }) {
   return (
-    <div className="m-3 border-2 rounded-2xl h-[450px] overflow-auto p-5 container">
+    <div className="border-2 rounded-2xl h-[450px] overflow-auto p-5 container">
       <Table className="border-separate" style={{ borderSpacing: "0 0.75rem" }}>
         <TableHeader className="bg-primary-foreground/80 sticky top-0">
           <TableRow>
