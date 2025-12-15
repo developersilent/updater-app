@@ -1,5 +1,6 @@
 import {
   boolean,
+  index,
   pgEnum,
   pgTable,
   text,
@@ -15,16 +16,22 @@ export const users = pgTable("users", {
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 });
 
-export const all_subjects = pgTable("all_subjects", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  subject_name: text("subject_name").notNull(),
-  userId: uuid("user_id")
-    .references(() => users.id, { onDelete: "cascade" })
-    .notNull(),
-  description: text("description"),
-  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
-  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
-});
+export const all_subjects = pgTable(
+  "all_subjects",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    subject_name: text("subject_name").notNull(),
+    userId: uuid("user_id")
+      .references(() => users.id, { onDelete: "cascade" })
+      .notNull(),
+    description: text("description"),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+  },
+  (table) => ({
+    userIdIdx: index("all_subjects_user_id_idx").on(table.userId),
+  }),
+);
 
 export const STATUS = pgEnum("status", [
   "COMPLETED",
@@ -48,19 +55,29 @@ export const all_chapters_for_each_subject = pgTable(
     createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
   },
+  (table) => ({
+    subjectIdIdx: index("chapters_subject_id_idx").on(table.subject_id),
+  }),
 );
 
-export const todos = pgTable("todos", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  title: text("title").notNull(),
-  description: text("description"),
-  isCompleted: boolean("is_completed").notNull().default(false),
-  userId: uuid("user_id")
-    .references(() => users.id, { onDelete: "cascade" })
-    .notNull(),
-  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
-  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
-});
+export const todos = pgTable(
+  "todos",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    title: text("title").notNull(),
+    description: text("description"),
+    isCompleted: boolean("is_completed").notNull().default(false),
+    userId: uuid("user_id")
+      .references(() => users.id, { onDelete: "cascade" })
+      .notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+  },
+  (table) => ({
+    userIdIdx: index("todos_user_id_idx").on(table.userId),
+    createdAtIdx: index("todos_created_at_idx").on(table.createdAt),
+  }),
+);
 
 export type SubjectsType = typeof all_subjects.$inferInsert;
 export type StatusType = (typeof STATUS.enumValues)[number];

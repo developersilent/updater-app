@@ -8,6 +8,13 @@
       "when": 1765801286773,
       "tag": "0000_glorious_maelstrom",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1765824570670,
+      "tag": "0001_true_namora",
+      "breakpoints": true
     }
   ]
 }
