@@ -15,6 +15,7 @@ export function useGetUserSubjects() {
       }
       return data.subjects;
     },
+    staleTime: 2 * 60 * 1000, // 2 minutes
   });
   return { subjects: data, isLoading };
 }

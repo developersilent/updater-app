@@ -15,6 +15,7 @@ export function useGetAllTodos() {
       }
       return data.todos;
     },
+    staleTime: 1 * 60 * 1000, // 1 minute
   });
   return { todos, isLoading };
 }

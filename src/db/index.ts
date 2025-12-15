@@ -12,8 +12,10 @@ declare global {
 const pool =
   global.pgPool ??
   new Pool({
-    max: 5,
+    max: 10,
     connectionString: process.env.DATABASE_URL,
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 5000,
   });
 
 // pool.on("connect", () => {
@@ -24,6 +26,6 @@ const pool =
 //   console.log("Client checked out from the pool");
 // });
 
-if (process.env.NODE_ENV !== "production") global.pgPool = pool;
+global.pgPool = pool;
 
 export const db = drizzle(pool, { schema });
