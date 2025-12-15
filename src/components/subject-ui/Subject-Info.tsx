@@ -34,40 +34,35 @@ export function SubjectInfo({ subject_count }: SubjectInfoProps) {
                 return 0;
               })
               .map((user) => (
-                <>
-                  <div
-                    style={{
-                      pointerEvents:
-                        user.id === currentUserId ? "none" : "auto",
-                      backgroundColor:
-                        user.id === currentUserId ? "transparent" : "#0f0f0f",
-                    }}
-                    key={user.id}
-                    className="flex items-center px-5 border py-1 rounded-xl"
+                <div
+                  key={user.id}
+                  style={{
+                    pointerEvents: user.id === currentUserId ? "none" : "auto",
+                    backgroundColor:
+                      user.id === currentUserId ? "transparent" : "#0f0f0f",
+                  }}
+                  className="flex items-center px-5 border py-1 rounded-xl"
+                >
+                  <Link
+                    href={`/user/${user.id}/?name=${user.username}`}
+                    className="flex-1 flex items-center gap-2 py-2"
                   >
-                    <Link
-                      href={`/user/${user.id}/?name=${user.username}`}
-                      className="flex-1 flex items-center gap-2 py-2"
-                    >
-                      <User className="size-7 p-1 inline-block mr-2 text-foreground/70 bg-card rounded-full border-2" />
-                      <p key={user.id} className="text-sm">
-                        {user.username}
-                        {user.id === currentUserId && " (You)"}
-                      </p>
-                    </Link>
+                    <User className="size-7 p-1 inline-block mr-2 text-foreground/70 bg-card rounded-full border-2" />
+                    <p className="text-sm">
+                      {user.username}
+                      {user.id === currentUserId && " (You)"}
+                    </p>
+                  </Link>
 
-                    {currentUserId !== user.id && (
-                      <Button asChild variant={"outline"} size={"sm"}>
-                        <Link href={`/todos/${user.id}/?name=${user.username}`}>
-                          <ListTodo className="size-4 text-blue-500 animate-pulse" />
-                          <p key={user.id} className="text-xs">
-                            Todos
-                          </p>
-                        </Link>
-                      </Button>
-                    )}
-                  </div>
-                </>
+                  {currentUserId !== user.id && (
+                    <Button asChild variant={"outline"} size={"sm"}>
+                      <Link href={`/todos/${user.id}/?name=${user.username}`}>
+                        <ListTodo className="size-4 text-blue-500 animate-pulse" />
+                        <p className="text-xs">Todos</p>
+                      </Link>
+                    </Button>
+                  )}
+                </div>
               ))}
           </>
         ) : (

@@ -116,10 +116,9 @@ export const subjectRoute = createNewRoute({
     }),
   getUserSubjects: protectedProcedure.query(async ({ ctx, c }) => {
     try {
-      const subjects = await db
-        .select()
-        .from(all_subjects)
-        .where(eq(all_subjects.userId, ctx.user.userId));
+      const subjects = await db.query.all_subjects.findMany({
+        where: eq(all_subjects.userId, ctx.user.userId),
+      });
 
       if (!subjects) {
         return c.json({ success: false, message: "No subjects found" });
@@ -141,21 +140,18 @@ export const subjectRoute = createNewRoute({
       }
       const { subjectId } = validatedInput.data;
       try {
-        const subject = await db
-          .select()
-          .from(all_subjects)
-          .where(
-            and(
-              eq(all_subjects.id, subjectId),
-              eq(all_subjects.userId, ctx.user.userId),
-            ),
-          );
+        const subject = await db.query.all_subjects.findFirst({
+          where: and(
+            eq(all_subjects.id, subjectId),
+            eq(all_subjects.userId, ctx.user.userId),
+          ),
+        });
 
-        if (subject.length === 0) {
+        if (!subject) {
           return c.json({ success: false, message: "Subject not found" });
         }
 
-        return c.json({ success: true, subject });
+        return c.json({ success: true, subject: [subject] });
       } catch {
         return c.json({ success: false, message: "Failed to fetch subject" });
       }
@@ -169,10 +165,9 @@ export const subjectRoute = createNewRoute({
       }
       const { userId } = validatedInput.data;
       try {
-        const subjects = await db
-          .select()
-          .from(all_subjects)
-          .where(eq(all_subjects.userId, userId));
+        const subjects = await db.query.all_subjects.findMany({
+          where: eq(all_subjects.userId, userId),
+        });
 
         return c.json({ success: true, subjects });
       } catch {

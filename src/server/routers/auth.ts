@@ -20,11 +20,10 @@ export const authRoute = createNewRoute({
         return c.json({ success: false, message: "Invalid input data" });
       }
       try {
-        const is_user_exists = await db
-          .select()
-          .from(users)
-          .where(eq(users.username, input.username));
-        if (is_user_exists.length > 0) {
+        const is_user_exists = await db.query.users.findFirst({
+          where: eq(users.username, input.username),
+        });
+        if (is_user_exists) {
           return c.json({ success: false, message: "User already exists" });
         }
         const hashedPassword = await hashPassword(input.password);
@@ -71,11 +70,9 @@ export const authRoute = createNewRoute({
       return c.json({ success: false, message: "Invalid input data" });
     }
     try {
-      const [is_user_exists] = await db
-        .select()
-        .from(users)
-        .where(eq(users.username, input.username))
-        .limit(1);
+      const is_user_exists = await db.query.users.findFirst({
+        where: eq(users.username, input.username),
+      });
       if (!is_user_exists) {
         return c.json({ success: false, message: "User not found" });
       }
@@ -153,7 +150,7 @@ export const authRoute = createNewRoute({
   }),
   allUser: protectedProcedure.query(async ({ c }) => {
     try {
-      const all_users = await db.select().from(users);
+      const all_users = await db.query.users.findMany();
       return c.json({ success: true, users: all_users });
     } catch {
       return c.json({ success: false, message: "Failed to fetch users" });

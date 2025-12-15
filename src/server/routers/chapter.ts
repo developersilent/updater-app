@@ -138,10 +138,9 @@ export const chapterRouter = createNewRoute({
     .mutation(async ({ input, c }) => {
       const { subjectId } = input;
       try {
-        const chapters = await db
-          .select()
-          .from(all_chapters_for_each_subject)
-          .where(and(eq(all_chapters_for_each_subject.subject_id, subjectId)));
+        const chapters = await db.query.all_chapters_for_each_subject.findMany({
+          where: eq(all_chapters_for_each_subject.subject_id, subjectId),
+        });
 
         return c.json({
           success: true,

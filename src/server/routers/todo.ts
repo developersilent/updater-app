@@ -139,10 +139,9 @@ export const todoRoute = createNewRoute({
         );
 
       // Fetch remaining todos
-      const userTodos = await db
-        .select()
-        .from(todos)
-        .where(eq(todos.userId, ctx.user.userId));
+      const userTodos = await db.query.todos.findMany({
+        where: eq(todos.userId, ctx.user.userId),
+      });
 
       return c.json({
         success: true,
@@ -161,10 +160,9 @@ export const todoRoute = createNewRoute({
       }
       const { userId } = validatedInput.data;
       try {
-        const userTodos = await db
-          .select()
-          .from(todos)
-          .where(eq(todos.userId, userId));
+        const userTodos = await db.query.todos.findMany({
+          where: eq(todos.userId, userId),
+        });
 
         return c.json({
           success: true,
